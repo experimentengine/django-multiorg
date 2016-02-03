@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: django-multiorg
-Version: 0.2
+Version: 0.2.1
 Summary: Allow users to view a Django application as a member of different organizations.
 Home-page: http://github.com/experimentengine/django-multiorg/
 Author: Jeremy Boyd
