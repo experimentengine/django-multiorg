@@ -21,6 +21,7 @@ Optional configurations:
 
 * `MULTIORG_REDIRECT_URL`: the path the user should be redirected to after adopting an organization. Default: `'/'`.
 * `MULTIORG_NEXT_PARAM_NAME`: the name of a GET/POST param that contains a destination for redirects after organization adoption. Default: `'next_url'`.
+* `MULTIORG_ADMINS_ADOPT_ANY`: a boolean value for whether admins should be allowed to adopt any org, regardless of their M2M relationship. Default: `False`.
 
 
 Example use
@@ -41,6 +42,7 @@ With django-multiorg, the user can *adopt* a new company, allowing them to see t
 Release status
 --------------
 Although we are just now releasing django-multiorg, it has been in production use for nearly a year at [Experiment Engine](https://www.experimentengine.com/).
+
 
 Acknowledgements
 ----------------

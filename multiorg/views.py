@@ -11,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 MULTIORG_REDIRECT_URL = getattr(settings, 'MULTIORG_REDIRECT_URL', '/')
 NEXT_URL_PARAM_NAME = getattr(settings, 'MULTIORG_NEXT_PARAM_NAME', 'next_url')
+ADMINS_ADOPT_ANY = getattr(settings, 'MULTIORG_ADMINS_ADOPT_ANY', False)
 
 
 class MultiorgAdoptionView(View):
     """
     Sets a session variable for a user-adopted organization (e.g. Company).
     """
-    def _adopt_org(self, request, organization_id, redirect_destination):
+    def _adopt_org(self, organization_id, redirect_destination):
         if organization_id is None:
             return HttpResponseBadRequest()
 
@@ -35,10 +36,10 @@ class MultiorgAdoptionView(View):
         user_organizations = getattr(self.request.user,
                                      settings.MULTIORG_ORGANIZATION_ATTR)
         if organization not in user_organizations.all():
-            return HttpResponseForbidden()
+            if not (ADMINS_ADOPT_ANY and self.request.user.is_staff):
+                return HttpResponseForbidden()
 
-        # At this point, we know the selected org exists and is one the user is
-        # connected to.
+        # At this point, we know the user is allowed to adopt an existing organization.
         self.request.session['multiorg_adopted_org'] = organization_id
         return HttpResponseRedirect(redirect_destination)
 
