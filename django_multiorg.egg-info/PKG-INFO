@@ -1,20 +1,19 @@
 Metadata-Version: 1.1
 Name: django-multiorg
-Version: 0.1
+Version: 0.2
 Summary: Allow users to view a Django application as a member of different organizations.
 Home-page: http://github.com/experimentengine/django-multiorg/
 Author: Jeremy Boyd
 Author-email: jeremy.boyd@experimentengine.com
-License: BSD License
+License: MIT License
 Description: django-multiorg
         ===============
         Allow users to view a Django application as a member of different organizations.
         
-        Implementation details modeled on [django-masquerade](https://bitbucket.org/technivore/django-masquerade/).
         
         Using django-multiorg
         ---------------------
-        django-multiorg is agnostic about your current user/organization makeup. In fact, it was developed in an architecture where users were members of only one organization.
+        django-multiorg is agnostic about your current user/organization makeup. In fact, it was developed in an architecture where users were initially members of only one organization.
         
         All that's required is that the user model (per Django's `get_user_model`) have an M2M relationship with the organization model.
         
@@ -24,19 +23,45 @@ Description: django-multiorg
         
         * `MULTIORG_ORGANIZATION_MODEL`: the model your User model has an M2M relationship with. Example: `'companies.Company'`.
         * `MULTIORG_ORGANIZATION_ATTR`: the name of the attribute on the User model for this M2M relationship. Example: `'companies'`.
-        * `MULTIORG_ORGANIZATION_DEFAULT_ATTR`: the name of the attribute on the User model to use as a default, if no org has been adopted. Example: `company`.  
+        * `MULTIORG_ORGANIZATION_DEFAULT_ATTR`: the name of the attribute on the User model to use as a default, if no organization has been adopted. Example: `company`.  
         
         Optional configurations:
         
         * `MULTIORG_REDIRECT_URL`: the path the user should be redirected to after adopting an organization. Default: `'/'`.
         * `MULTIORG_NEXT_PARAM_NAME`: the name of a GET/POST param that contains a destination for redirects after organization adoption. Default: `'next_url'`.
+        * `MULTIORG_ADMINS_ADOPT_ANY`: a boolean value for whether admins should be allowed to adopt any org, regardless of their M2M relationship. Default: `False`.
         
+        
+        Example use
+        -----------
+        In some cases, we determine what to show users based on their `company` attribute:
+         
+            class CompanyUserView(View):
+                ...
+                def get_context_data(self):
+                    ctx = {}
+                    ctx['company_users'] = User.objects.filter(company=self.request.user.company)
+                    ...
+                    return ctx
+            
+        With django-multiorg, the user can *adopt* a new company, allowing them to see the users for any company they're associated with. 
+        
+        
+        Release status
+        --------------
+        Although we are just now releasing django-multiorg, it has been in production use for nearly a year at [Experiment Engine](https://www.experimentengine.com/).
+        
+        
+        Acknowledgements
+        ----------------
+        django-multiorg's implementation is modeled on [django-masquerade](https://bitbucket.org/technivore/django-masquerade/), which allows
+        staff users to view a Django-powered site as though they were another user.
         
 Platform: UNKNOWN
 Classifier: Environment :: Web Environment
 Classifier: Framework :: Django
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: BSD License
+Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 2
