@@ -9,9 +9,8 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    setup_requires=['setuptools-markdown'],
     name='django-multiorg',
-    version='0.2.1',
+    version='0.2.2',
     packages=['multiorg',],
     include_package_data=True,
     license='MIT License',
